@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Order Placed</title>
+</head>
+<body>
+    <h1>🎉 Thank You for Your Order!</h1>
+    <p>You've placed an order for:</p>
+
+    {% for product in products %}
+        <div>
+            <strong>{{ product.name }}</strong> – ₹{{ product.price }}
+        </div>
+    {% endfor %}
+
+    <p>Our team will contact you soon to confirm delivery.</p>
+    <a href="/">Back to Home</a>
+<footer class="bg-dark text-white text-center py-4 mt-5">
+  <div class="container">
+    <p class="mb-1">© {{ year|default:"2025" }} Vinay Mobiles. All rights reserved.</p>
+    <p class="small text-muted mb-0">Designed & built with ❤️ using Django + Bootstrap</p>
+  </div>
+</footer>
+<!-- WhatsApp Button -->
+<a href="https://wa.me/917736266751" class="whatsapp-float" target="_blank">
+  <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="Chat on WhatsApp" width="50">
+</a>
+
+<style>
+.whatsapp-float {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 999;
+  cursor: pointer;
+}
+</style>
+
+<!-- Newsletter / Contact Panel -->
+<section class="bg-dark text-white py-5 mt-5">
+  <div class="container">
+    <h3 class="mb-3">Stay in the Loop</h3>
+    <form>
+      <div class="row">
+        <div class="col-md-6 mb-2">
+          <input type="text" class="form-control" placeholder="Your Name">
+        </div>
+        <div class="col-md-6 mb-2">
+          <input type="email" class="form-control" placeholder="Your Email">
+        </div>
+      </div>
+      <div class="mb-3 mt-2">
+        <textarea class="form-control" rows="3" placeholder="Your Message"></textarea>
+      </div>
+      <button type="submit" class="btn btn-outline-light">Send</button>
+    </form>
+  </div>
+</section>
+
+</body>
+</html>
