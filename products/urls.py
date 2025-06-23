@@ -8,7 +8,5 @@ urlpatterns = [
     path('cart/', views.view_cart, name='view_cart'),
     path('remove-from-cart/<int:pk>/', views.remove_from_cart, name='remove_from_cart'),
     path('place-order/', views.place_order, name='place_order'),
-
+    path('my-webhook/', views.deploy, name='deploy'),  # include webhook here too!
 ]
-
-
