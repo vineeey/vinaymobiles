@@ -38,10 +38,3 @@ def place_order(request):
     # For now, we're just displaying a thank-you page
     request.session['cart'] = []  # Clear the cart after "order"
     return render(request, 'products/order_summary.html', {'products': products})
-# products/views.py
-
-from django.http import HttpResponse
-import os
-import subprocess
-
-
