@@ -10,13 +10,5 @@ urlpatterns = [
     path('place-order/', views.place_order, name='place_order'),
 
 ]
-# config/urls.py
 
-from django.urls import path
-from products.views import deploy
-
-urlpatterns = [
-    # your other URLs...
-    path("my-webhook/", deploy, name="deploy"),
-]
 

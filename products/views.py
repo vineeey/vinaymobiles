@@ -44,14 +44,4 @@ from django.http import HttpResponse
 import os
 import subprocess
 
-def deploy(request):
-    if request.method == "POST":
-        repo_dir = "/home/vineeey/vinaymobiles"
-        pull = subprocess.Popen(["git", "pull"], cwd=repo_dir, stdout=subprocess.PIPE)
-        pull_output = pull.stdout.read()
-
-        # Reload app
-        os.system("touch /var/www/vineeey_pythonanywhere_com_wsgi.py")
-        return HttpResponse(f"Deployed:\n{pull_output.decode()}")
-    return HttpResponse("Only POST method is allowed.", status=405)
 
