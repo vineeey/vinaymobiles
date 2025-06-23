@@ -38,3 +38,19 @@ def place_order(request):
     # For now, we're just displaying a thank-you page
     request.session['cart'] = []  # Clear the cart after "order"
     return render(request, 'products/order_summary.html', {'products': products})
+
+from django.http import HttpResponse
+import subprocess, os
+
+def deploy(request):
+    if request.method == "POST":
+        try:
+            output = subprocess.check_output(
+                ['git', 'pull'],
+                cwd='/home/vineeey/vinaymobiles'
+            )
+            os.system('touch /var/www/vineeey_pythonanywhere_com_wsgi.py')
+            return HttpResponse(f"Deployment complete:\n{output.decode()}")
+        except subprocess.CalledProcessError as e:
+            return HttpResponse(f"Error pulling code:\n{e.output.decode()}", status=500)
+    return HttpResponse("Only POST allowed", status=405)
