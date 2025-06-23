@@ -1,12 +1,12 @@
-from django.shortcuts import render
-from .models import Product
 from django.shortcuts import render, get_object_or_404, redirect
+from .models import Product, Order
+from django.http import HttpResponse
+from django.views.decorators.csrf import csrf_exempt
+import subprocess, os
 
 def home(request):
     products = Product.objects.filter(is_available=True)
     return render(request, 'products/home.html', {'products': products})
-from django.shortcuts import render, get_object_or_404
-from .models import Product
 
 def product_detail(request, pk):
     product = get_object_or_404(Product, pk=pk)
@@ -35,35 +35,6 @@ def place_order(request):
     cart = request.session.get('cart', [])
     products = Product.objects.filter(pk__in=cart)
 
-    # For now, we're just displaying a thank-you page
-    request.session['cart'] = []  # Clear the cart after "order"
-    return render(request, 'products/order_summary.html', {'products': products})
-
-from django.views.decorators.csrf import csrf_exempt
-from django.utils.decorators import method_decorator
-from django.http import HttpResponse
-import subprocess, os
-
-@csrf_exempt
-def deploy(request):
-    if request.method == "POST":
-        try:
-            output = subprocess.check_output(
-                ["git", "pull"],
-                cwd="/home/vineeey/vinaymobiles"
-            )
-            os.system("touch /var/www/vineeey_pythonanywhere_com_wsgi.py")
-            return HttpResponse(f"Deployment complete:\n{output.decode()}")
-        except subprocess.CalledProcessError as e:
-            return HttpResponse(f"Deployment failed:\n{e}", status=500)
-    return HttpResponse("Only POST method allowed", status=405)
-
-from .models import Order, Product
-
-def place_order(request):
-    cart = request.session.get('cart', [])
-    products = Product.objects.filter(pk__in=cart)
-
     if request.method == 'POST':
         name = request.POST.get('name')
         phone = request.POST.get('phone')
@@ -81,3 +52,17 @@ def place_order(request):
         })
 
     return render(request, 'products/place_order.html', {'products': products})
+
+@csrf_exempt
+def deploy(request):
+    if request.method == "POST":
+        try:
+            output = subprocess.check_output(
+                ["git", "pull"],
+                cwd="/home/vineeey/vinaymobiles"
+            )
+            os.system("touch /var/www/vineeey_pythonanywhere_com_wsgi.py")
+            return HttpResponse(f"Deployment complete:\n{output.decode()}")
+        except subprocess.CalledProcessError as e:
+            return HttpResponse(f"Deployment failed:\n{e}", status=500)
+    return HttpResponse("Only POST method allowed", status=405)
