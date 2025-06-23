@@ -57,3 +57,27 @@ def deploy(request):
         except subprocess.CalledProcessError as e:
             return HttpResponse(f"Deployment failed:\n{e}", status=500)
     return HttpResponse("Only POST method allowed", status=405)
+
+from .models import Order, Product
+
+def place_order(request):
+    cart = request.session.get('cart', [])
+    products = Product.objects.filter(pk__in=cart)
+
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        phone = request.POST.get('phone')
+        address = request.POST.get('address')
+
+        order = Order.objects.create(name=name, phone=phone, address=address)
+        order.products.set(products)
+        request.session['cart'] = []
+
+        return render(request, 'products/order_summary.html', {
+            'products': products,
+            'name': name,
+            'phone': phone,
+            'address': address
+        })
+
+    return render(request, 'products/place_order.html', {'products': products})
