@@ -39,18 +39,21 @@ def place_order(request):
     request.session['cart'] = []  # Clear the cart after "order"
     return render(request, 'products/order_summary.html', {'products': products})
 
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
 from django.http import HttpResponse
 import subprocess, os
 
+@csrf_exempt
 def deploy(request):
     if request.method == "POST":
         try:
             output = subprocess.check_output(
-                ['git', 'pull'],
-                cwd='/home/vineeey/vinaymobiles'
+                ["git", "pull"],
+                cwd="/home/vineeey/vinaymobiles"
             )
-            os.system('touch /var/www/vineeey_pythonanywhere_com_wsgi.py')
+            os.system("touch /var/www/vineeey_pythonanywhere_com_wsgi.py")
             return HttpResponse(f"Deployment complete:\n{output.decode()}")
         except subprocess.CalledProcessError as e:
-            return HttpResponse(f"Error pulling code:\n{e.output.decode()}", status=500)
-    return HttpResponse("Only POST allowed", status=405)
+            return HttpResponse(f"Deployment failed:\n{e}", status=500)
+    return HttpResponse("Only POST method allowed", status=405)
