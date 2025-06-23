@@ -20,15 +20,14 @@
       color: #f0f0f0 !important;
     }
 
-    .dark-mode .card,
-    .dark-mode .table,
-    .dark-mode .contact-panel {
+    .dark-mode .card {
       background-color: rgba(255, 255, 255, 0.05);
       color: #fff;
     }
 
     .dark-mode .navbar,
-    .dark-mode footer {
+    .dark-mode footer,
+    .dark-mode .contact-panel {
       background-color: #000 !important;
     }
 
@@ -37,18 +36,17 @@
       font-size: 1.3rem;
     }
 
-    .parallax {
-      background-image: url('/static/images/hero-banner.jpg'); /* Replace with your image */
-      background-attachment: fixed;
-      background-position: center;
-      background-size: cover;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
+    .hero {
+      background: linear-gradient(270deg, #0f2027, #203a43, #2c5364);
+      background-size: 600% 600%;
+      animation: gradientShift 10s ease infinite;
       color: white;
-      flex-direction: column;
+    }
+
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
     }
 
     .card {
@@ -101,20 +99,22 @@
   </div>
 </nav>
 
-<!-- 🌄 Parallax Hero Section -->
-<section class="parallax" data-aos="fade-in">
-  <h1 class="display-3 fw-bold">Vinay Mobiles</h1>
-  <p class="lead">The Future of iPhones — Yours Today.</p>
-  <a href="#products" class="btn btn-light mt-3">Explore Products</a>
+<!-- 🌄 Hero Section -->
+<section class="hero text-center py-5 mb-5">
+  <div class="container">
+    <h1 class="display-4 fw-bold">Premium Apple Devices</h1>
+    <p class="lead">Only the latest. Only the best. Right here at Vinay Mobiles.</p>
+    <a href="#products" class="btn btn-outline-light mt-3">Shop Now</a>
+  </div>
 </section>
 
 <!-- 📱 Product Grid -->
 <div id="products" class="container pb-5">
-  <h2 class="mb-4 text-center" data-aos="fade-up">Available iPhones</h2>
+  <h2 class="mb-4 text-center">Available iPhones</h2>
   <div class="row">
     {% for product in products %}
       {% if product.pk %}
-      <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="{{ forloop.counter0|add:"1" }}00">
+      <div class="col-md-4 mb-4" data-aos="fade-up">
         <div class="card h-100 shadow-sm p-3">
           <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
           <div class="card-body d-flex flex-column">
@@ -129,64 +129,8 @@
   </div>
 </div>
 
-<!-- 🙌 Testimonials -->
-<section class="bg-light py-5" data-aos="fade-up">
-  <div class="container">
-    <h2 class="text-center mb-4">What Our Customers Say</h2>
-    <div class="row">
-      {% for t in testimonials %}
-      <div class="col-md-4" data-aos="zoom-in" data-aos-delay="{{ forloop.counter0|add:"1" }}00">
-        <blockquote class="blockquote">
-          <p>"{{ t.content }}"</p>
-          <footer class="blockquote-footer">{{ t.name }}, {{ t.city }}</footer>
-        </blockquote>
-      </div>
-      {% endfor %}
-    </div>
-  </div>
-</section>
-
-<!-- 💸 Pricing Comparison -->
-<section class="py-5 bg-white" data-aos="fade-up">
-  <div class="container">
-    <h2 class="text-center mb-4">Why Choose Us Over Others</h2>
-    <div class="table-responsive">
-      <table class="table table-bordered text-center">
-        <thead class="table-dark">
-          <tr>
-            <th></th>
-            <th>Vinay Mobiles</th>
-            <th>Offline Retail</th>
-            <th>Other Online Stores</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Price</td>
-            <td>✅ Best offers</td>
-            <td>❌ MRP only</td>
-            <td>⚠️ Mixed</td>
-          </tr>
-          <tr>
-            <td>Delivery Speed</td>
-            <td>🚀 Same-day in Kerala</td>
-            <td>📦 Take-away</td>
-            <td>⏳ 3–7 days</td>
-          </tr>
-          <tr>
-            <td>Support</td>
-            <td>💬 Talk to Vinay directly</td>
-            <td>😐 Sales rep</td>
-            <td>📞 Call center</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-</section>
-
 <!-- 📬 Contact Form -->
-<section class="bg-dark text-white py-5 contact-panel" data-aos="fade-up">
+<section class="bg-dark text-white py-5 contact-panel">
   <div class="container">
     <h3 class="mb-3">Let’s Stay Connected</h3>
     <form>
@@ -218,4 +162,15 @@
 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 <script>
   AOS.init();
-  document.addEvent
+  document.addEventListener('DOMContentLoaded', () => {
+    if (localStorage.getItem('theme') === 'dark') {
+      document.body.classList.add('dark-mode');
+    }
+    document.getElementById('theme-toggle')?.addEventListener('click', () => {
+      document.body.classList.toggle('dark-mode');
+      localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
+    });
+  });
+</script>
+</body>
+</html>
